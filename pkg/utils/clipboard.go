@@ -6,7 +6,6 @@ import (
 	"golang.design/x/clipboard"
 )
 
-
 func ExportToClipboard(templatedStr string) {
 	err := clipboard.Init()
 	if err != nil {

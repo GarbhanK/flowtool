@@ -1,33 +1,32 @@
 package cmd
 
 import (
-    "fmt"
-    // "os"
+	"fmt"
+	// "os"
 
-    "github.com/spf13/cobra"
-    // "github.com/spf13/viper"
+	"github.com/spf13/cobra"
+	// "github.com/spf13/viper"
 )
 
 var (
-    // Used for flags.
-    cfgFile string
-    userLicense string
+	// Used for flags.
+	cfgFile     string
+	userLicense string
 
-    rootCmd = &cobra.Command{
-        Use: "flowtool",
-        Short: "Template airflow vars",
-        Long: `A fast and Flexible satic site generator built with
+	rootCmd = &cobra.Command{
+		Use:   "flowtool",
+		Short: "Template airflow vars",
+		Long: `A fast and Flexible satic site generator built with
                     love by spf13 adn friends in Go.
                     Complete diocs available at link`,
-        Run: func(cmd *cobra.Command, args []string) {
-            fmt.Println("Hello from root")
-        },
-    }
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("Hello from root")
+		},
+	}
 )
 
-
 func Execute() error {
-    return rootCmd.Execute()
+	return rootCmd.Execute()
 }
 
 // func init() {
@@ -45,7 +44,6 @@ func Execute() error {
 //     rootCmd.AddCommand(addCmd)
 //     rootCmd.AddCommand(initCmd)
 // }
-
 
 // func initConfig() {
 //     if cfgFile != "" {
@@ -68,4 +66,3 @@ func Execute() error {
 //         fmt.Println("Using config file:", viper.ConfigFileUsed())
 //     }
 // }
-

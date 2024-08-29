@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-
 	// "github.com/xwb1989/sqlparser"
 	// "github.com/fatih/color"
 )

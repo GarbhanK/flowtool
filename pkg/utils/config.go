@@ -3,9 +3,9 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
-	"io/ioutil"
 	// "strings"
 )
 
@@ -44,7 +44,7 @@ func AddConfig(m map[string]string, key string, val string) {
 	}
 
 	fp := fmt.Sprintf("%s/Documents/flowtool/config.json", homeDir)
-	
+
 	err = ioutil.WriteFile(fp, jsonString, os.ModePerm)
 	if err != nil {
 		log.Fatal(err)
@@ -58,7 +58,7 @@ func ListConfig() {
 	// find the longest key
 	var longestKey int = 0
 	for key, _ := range m {
-		if (len(key) > longestKey) {
+		if len(key) > longestKey {
 			longestKey = len(key)
 		}
 	}
@@ -70,5 +70,5 @@ func ListConfig() {
 	for key, val := range m {
 		// fmt.Println(key, ":", indent, val)
 		fmt.Println(key, ":", val)
-	}	
+	}
 }
