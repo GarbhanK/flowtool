@@ -33,12 +33,19 @@ func ReadConfig() map[string]string {
 func AddConfig(m map[string]string, key string, val string) {
 	// TODO: add check if key already exists
 
+	for existing_key, _ := range m {
+		if key == existing_key {
+			fmt.Printf("\nKey %s already exists in the config file, exiting...\n", key)
+			os.Exit(1)
+		}
+	}
+
 	// add the new k/v pair
 	m[key] = val
 
 	err := writeToConfig(m)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("Error writing to config.json: %w\n", err)
 	}
 }
 
