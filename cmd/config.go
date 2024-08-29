@@ -8,10 +8,13 @@ import (
 )
 
 func init() {
+    // top level command
+	rootCmd.AddCommand(configCmd)
+
+    // subcommands
 	configCmd.AddCommand(listCmd)
 	configCmd.AddCommand(addCmd)
 	configCmd.AddCommand(removeCmd)
-	rootCmd.AddCommand(configCmd)
 }
 
 var configCmd = &cobra.Command{
@@ -57,6 +60,7 @@ var addCmd = &cobra.Command{
 
 var removeCmd = &cobra.Command{
     Use: "remove",
+    Aliases: []string{"rm"},
     Short: "remove key/value pairs from the config.json",
     Run: func(cmd *cobra.Command, args []string) {
         var key string
@@ -64,9 +68,10 @@ var removeCmd = &cobra.Command{
         config := utils.ReadConfig()
         utils.ListConfig()
 
-        fmt.Println("Enter new key: ")
+        fmt.Println("Enter key you want to remove: ")
 		fmt.Scanln(&key)
 
         utils.RemoveConfig(config, key)
+        fmt.Printf("Successfully removed %s from config!\n", key)
     },
 }

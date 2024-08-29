@@ -36,15 +36,7 @@ func AddConfig(m map[string]string, key string, val string) {
 	// add the new k/v pair
 	m[key] = val
 
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		log.Fatal(err)
-	}
-	
-	fp := fmt.Sprintf("%s/Documents/flowtool/config.json", homeDir)
-	
-	jsonString, _ := json.MarshalIndent(m, "", "    ")
-	err = ioutil.WriteFile(fp, jsonString, os.ModePerm)
+	err := writeToConfig(m)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,10 +63,16 @@ func ListConfig() {
 
 func RemoveConfig(m map[string]string, key string) {
 	delete(m, key)
-	
-	homeDir, err := os.UserHomeDir()
+	err := writeToConfig(m)
 	if err != nil {
 		log.Fatal(err)
+	}
+}
+
+func writeToConfig(m map[string]string) error {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return fmt.Errorf("Error finding Home Directory: %w", err)
 	}
 
 	fp := fmt.Sprintf("%s/Documents/flowtool/config.json", homeDir)
@@ -82,6 +80,8 @@ func RemoveConfig(m map[string]string, key string) {
 	jsonString, _ := json.MarshalIndent(m, "", "    ")
 	err = ioutil.WriteFile(fp, jsonString, os.ModePerm)
 	if err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("Error writing to config file: %w", err)
 	}
+
+	return nil
 }
