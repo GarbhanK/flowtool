@@ -36,15 +36,14 @@ func AddConfig(m map[string]string, key string, val string) {
 	// add the new k/v pair
 	m[key] = val
 
-	jsonString, _ := json.Marshal(m)
-
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	
 	fp := fmt.Sprintf("%s/Documents/flowtool/config.json", homeDir)
-
+	
+	jsonString, _ := json.MarshalIndent(m, "", "    ")
 	err = ioutil.WriteFile(fp, jsonString, os.ModePerm)
 	if err != nil {
 		log.Fatal(err)
@@ -64,11 +63,25 @@ func ListConfig() {
 	}
 
 	// indent := strings.Repeat(string(' '), longestKey)
-	fmt.Print("\n")
-
-	fmt.Println("	==== config.json contents ====")
 	for key, val := range m {
 		// fmt.Println(key, ":", indent, val)
 		fmt.Println(key, ":", val)
+	}
+}
+
+func RemoveConfig(m map[string]string, key string) {
+	delete(m, key)
+	
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fp := fmt.Sprintf("%s/Documents/flowtool/config.json", homeDir)
+
+	jsonString, _ := json.MarshalIndent(m, "", "    ")
+	err = ioutil.WriteFile(fp, jsonString, os.ModePerm)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
