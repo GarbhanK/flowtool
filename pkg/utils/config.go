@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	// "strings"
 )
 
 func ReadConfig() map[string]string {
@@ -31,8 +30,8 @@ func ReadConfig() map[string]string {
 }
 
 func AddConfig(m map[string]string, key string, val string) {
-	// TODO: add check if key already exists
 
+	// check if key already exists
 	for existing_key, _ := range m {
 		if key == existing_key {
 			fmt.Printf("\nKey %s already exists in the config file, exiting...\n", key)
@@ -61,9 +60,7 @@ func ListConfig() {
 		}
 	}
 
-	// indent := strings.Repeat(string(' '), longestKey)
 	for key, val := range m {
-		// fmt.Println(key, ":", indent, val)
 		fmt.Println(key, ":", val)
 	}
 }
@@ -72,7 +69,7 @@ func RemoveConfig(m map[string]string, key string) {
 	delete(m, key)
 	err := writeToConfig(m)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Printf("Error writing to config.json: %w\n", err)
 	}
 }
 

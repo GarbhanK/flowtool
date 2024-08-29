@@ -27,7 +27,9 @@ var templateCmd = &cobra.Command{
 		sqlFilename := args[0]
 
 		var m map[string]string
-		m = utils.CreateMapping()
+		env, _ := cmd.Flags().GetString("env")
+
+		m = utils.CreateMapping(env)
 		m = utils.AddAirflowTemplateVars(m)
 
 		// read in sql file

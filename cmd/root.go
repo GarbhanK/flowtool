@@ -29,9 +29,12 @@ func Execute() error {
 	return rootCmd.Execute()
 }
 
-// func init() {
+func init() {
 //     cobra.OnInitialize(initConfig)
 
+// rootCmd.PersistentFlags().StringVarP(&Verbose, "verbose", "v", false, "verbose output")
+rootCmd.PersistentFlags().String("env", "dev", "The desirev environment to template into config values")
+}
 //     rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "cinfig file (default")
 //     rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
 // 	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")

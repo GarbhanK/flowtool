@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"log"
 	"os"
-	// "strings"
+	"strings"
 	"time"
 )
 
-func CreateMapping() map[string]string {
+func CreateMapping(env string) map[string]string {
 
 	// var mappingFilePath string
 
@@ -36,9 +36,11 @@ func CreateMapping() map[string]string {
 	json.Unmarshal([]byte(mappingFile), &m)
 
 	// template chosen environment into our mapping file
-	// for k, v := range m {
-	// 	m[k] = strings.Replace(v, "${env}", env, 1)
-	// }
+	// env, _ := cmd.Flags().GetString("env")
+	fmt.Println(env)
+	for k, v := range m {
+		m[k] = strings.Replace(v, "${env}", env, 1)
+	}
 
 	return m
 }
