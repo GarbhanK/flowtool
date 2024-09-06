@@ -18,7 +18,7 @@ var (
 		Short: "Template airflow vars",
 		Long: `A fast and Flexible satic site generator built with
                     love by spf13 adn friends in Go.
-                    Complete diocs available at link`,
+                    Complete docs available at link`,
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("Hello from root")
 		},
@@ -30,11 +30,12 @@ func Execute() error {
 }
 
 func init() {
-//     cobra.OnInitialize(initConfig)
+	//     cobra.OnInitialize(initConfig)
 
-// rootCmd.PersistentFlags().StringVarP(&Verbose, "verbose", "v", false, "verbose output")
-rootCmd.PersistentFlags().String("env", "dev", "The desirev environment to template into config values")
+	// rootCmd.PersistentFlags().StringVarP(&Verbose, "verbose", "v", false, "verbose output")
+	rootCmd.PersistentFlags().String("env", "dev", "The desirev environment to template into config values")
 }
+
 //     rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "cinfig file (default")
 //     rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
 // 	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")

@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
 	// "github.com/xwb1989/sqlparser"
-	// "github.com/fatih/color"
+	"github.com/fatih/color"
 )
 
 func ReadSQL(fileName string) string {
@@ -50,8 +51,8 @@ func ValidateSQL(sqlFile string) {
 
 	var statementType string = queryWords[0]
 	if strings.ToLower(statementType) == "create" {
-		// color.Yellow("WARNING - copied query is a CREATE statement!\n")
-		fmt.Println("WARNING - copied query is a CREATE statement!\n")
+		color.Yellow("WARNING - copied query is a CREATE statement!\n")
+		// fmt.Printf("WARNING - copied query is a CREATE statement!\n")
 	}
 }
 

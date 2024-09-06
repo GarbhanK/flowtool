@@ -36,10 +36,8 @@ func CreateMapping(env string) map[string]string {
 	json.Unmarshal([]byte(mappingFile), &m)
 
 	// template chosen environment into our mapping file
-	// env, _ := cmd.Flags().GetString("env")
-	fmt.Println(env)
 	for k, v := range m {
-		m[k] = strings.Replace(v, "${env}", env, 1)
+		m[k] = strings.Replace(v, "${env}", env, -1)
 	}
 
 	return m
