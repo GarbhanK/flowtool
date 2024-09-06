@@ -12,6 +12,7 @@ import (
 func ReadSQL(fileName string) string {
 	f, err := os.ReadFile(fileName)
 	if err != nil {
+		// TODO: better error handling
 		panic(err)
 	}
 	// TODO: add check for if the file ends in '.sql'

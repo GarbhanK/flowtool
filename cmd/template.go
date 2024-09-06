@@ -42,6 +42,9 @@ var templateCmd = &cobra.Command{
 		utils.ExportToClipboard(templatedSQL)
 
 		// TODO: add 'quiet' flag for not printing to terminal
-		fmt.Print(utils.ClipboardToString())
+		quietFlag, _ := cmd.Flags().GetBool("quiet")
+		if !quietFlag {
+			fmt.Print(utils.ClipboardToString())
+		}
 	},
 }

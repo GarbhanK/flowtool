@@ -31,8 +31,7 @@ func Execute() error {
 
 func init() {
 	//     cobra.OnInitialize(initConfig)
-
-	// rootCmd.PersistentFlags().StringVarP(&Verbose, "verbose", "v", false, "verbose output")
+	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Do not print formatted output to the terminal")
 	rootCmd.PersistentFlags().String("env", "dev", "The desirev environment to template into config values")
 }
 
