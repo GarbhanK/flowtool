@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/garbhank/flowtool/pkg/utils"
 	"github.com/spf13/cobra"
@@ -71,7 +72,11 @@ var removeCmd = &cobra.Command{
 		fmt.Println("\nEnter key you want to remove: ")
 		fmt.Scanln(&key)
 
-		utils.RemoveConfig(config, key)
+		err := utils.RemoveConfig(config, key)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		fmt.Printf("Successfully removed %s from config!\n", key)
 	},
 }

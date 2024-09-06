@@ -3,9 +3,9 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
+	"strings"
 )
 
 func ReadConfig() map[string]string {
@@ -44,7 +44,7 @@ func AddConfig(m map[string]string, key string, val string) {
 
 	err := writeToConfig(m)
 	if err != nil {
-		fmt.Printf("Error writing to config.json: %w\n", err)
+		fmt.Printf("Error writing to config.json: %v\n", err)
 	}
 }
 
@@ -60,31 +60,37 @@ func ListConfig() {
 		}
 	}
 
+	var keylen int = 0
 	for key, val := range m {
-		fmt.Println(key, ":", val)
+		keylen = len(key)
+		indent := longestKey - keylen
+		whitespace := strings.Repeat(" ", indent)
+		fmt.Printf("%s: %s%s\n", key, whitespace, val)
 	}
 }
 
-func RemoveConfig(m map[string]string, key string) {
+func RemoveConfig(m map[string]string, key string) error {
 	delete(m, key)
 	err := writeToConfig(m)
 	if err != nil {
-		fmt.Printf("Error writing to config.json: %w\n", err)
+		return fmt.Errorf("error writing to config.json: %v", err)
 	}
+
+	return nil
 }
 
 func writeToConfig(m map[string]string) error {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
-		return fmt.Errorf("Error finding Home Directory: %w", err)
+		return fmt.Errorf("error finding Home Directory: %v", err)
 	}
 
 	fp := fmt.Sprintf("%s/Documents/flowtool/config.json", homeDir)
 
 	jsonString, _ := json.MarshalIndent(m, "", "    ")
-	err = ioutil.WriteFile(fp, jsonString, os.ModePerm)
+	err = os.WriteFile(fp, jsonString, os.ModePerm)
 	if err != nil {
-		return fmt.Errorf("Error writing to config file: %w", err)
+		return fmt.Errorf("error writing to config file: %w", err)
 	}
 
 	return nil
