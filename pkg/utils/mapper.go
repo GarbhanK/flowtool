@@ -7,6 +7,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 func CreateMapping(env string) map[string]string {
@@ -34,6 +36,15 @@ func CreateMapping(env string) map[string]string {
 
 	// read json file into a map[string]string
 	json.Unmarshal([]byte(mappingFile), &m)
+
+	cfgFileEnv := viper.GetString("env")
+	fmt.Println(cfgFileEnv)
+
+	// set flag > config file > default
+	// if I have a flag set, override config file
+	if env == "dev" && cfgFileEnv != "" {
+		env = cfgFileEnv
+	}
 
 	// template chosen environment into our mapping file
 	for k, v := range m {

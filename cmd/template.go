@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	"github.com/garbhank/flowtool/pkg/utils"
 )
@@ -42,6 +43,9 @@ var templateCmd = &cobra.Command{
 		utils.ExportToClipboard(templatedSQL)
 
 		// TODO: add 'quiet' flag for not printing to terminal
+		cfgFileQuiet := viper.GetBool("quiet")
+		fmt.Println(cfgFileQuiet)
+
 		quietFlag, _ := cmd.Flags().GetBool("quiet")
 		if !quietFlag {
 			fmt.Print(utils.ClipboardToString())
