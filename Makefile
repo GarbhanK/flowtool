@@ -18,7 +18,7 @@ clean:
 	rm ./bin/${BINARY_NAME}-windows
 
 test:
-	go test ./...
+	go test ./... -v
 
 dep:
 	go mod download

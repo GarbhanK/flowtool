@@ -31,6 +31,7 @@ func ReadSQL(fileName string) (string, error) {
 }
 
 func ValidateSQL(sqlFile string) {
+	// we could definitely add more 'validations' here, that or make the name more specific
 	formattedSQL := strings.ReplaceAll(sqlFile, "\n", " ")
 	queryWords := strings.Split(formattedSQL, " ")
 
