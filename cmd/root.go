@@ -10,17 +10,15 @@ import (
 
 var (
 	// Used for flags.
-	cfgFile     string
-	userLicense string
+	// cfgFile     string
 
 	rootCmd = &cobra.Command{
 		Use:   "flowtool",
 		Short: "Template airflow vars",
-		Long: `A fast and Flexible satic site generator built with
-                    love by spf13 adn friends in Go.
-                    Complete docs available at link`,
+		Long: `Tool for replacing Jinja2 templates for use with Apache Airflow.
+				Output is returned to the clipboard as well stdout.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("Hello from root")
+			fmt.Println("template a SQL file with 'template' or 'templ'\nconfigure flowtool with 'config'")
 		},
 	}
 )
@@ -37,7 +35,6 @@ func init() {
 
 //     rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "cinfig file (default")
 //     rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
-// 	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")
 // 	rootCmd.PersistentFlags().Bool("viper", true, "use Viper for configuration")
 // 	viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author"))
 // 	viper.BindPFlag("useViper", rootCmd.PersistentFlags().Lookup("viper"))

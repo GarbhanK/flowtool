@@ -32,7 +32,7 @@ func ReadConfig() map[string]string {
 func AddConfig(m map[string]string, key string, val string) {
 
 	// check if key already exists
-	for existing_key, _ := range m {
+	for existing_key := range m {
 		if key == existing_key {
 			fmt.Printf("\nKey %s already exists in the config file, exiting...\n", key)
 			os.Exit(1)
@@ -54,7 +54,7 @@ func ListConfig() {
 
 	// find the longest key
 	var longestKey int = 0
-	for key, _ := range m {
+	for key := range m {
 		if len(key) > longestKey {
 			longestKey = len(key)
 		}
