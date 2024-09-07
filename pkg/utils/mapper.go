@@ -52,7 +52,7 @@ func CreateMapping(env string) map[string]string {
 	return m
 }
 
-func AddAirflowTemplateVars(m map[string]string) map[string]string {
+func AddAirflowVars(m map[string]string) map[string]string {
 	// grab the current airflow date (today -1)
 	dt := time.Now().AddDate(0, 0, -1)
 	yesterday := dt.AddDate(0, 0, -1)
@@ -61,7 +61,16 @@ func AddAirflowTemplateVars(m map[string]string) map[string]string {
 	// create airflow template variables ref: https://airflow.apache.org/docs/apache-airflow/stable/templates-ref.html
 	ds := fmt.Sprintf("%d-%02d-%02d", dt.Year(), dt.Month(), dt.Day())
 	ds_nodash := fmt.Sprintf("%02d%02d%02d", dt.Year(), dt.Month(), dt.Day())
+
 	ts := fmt.Sprintf("%d-%02d-%02dT%02d:%02d:%02d+00:00",
+		dt.Year(), dt.Month(), dt.Day(),
+		dt.Hour(), dt.Minute(), dt.Second())
+
+	ts_nodash := fmt.Sprintf("%d%02d%dT%02d%02d%02d+0000",
+		dt.Year(), dt.Month(), dt.Day(),
+		dt.Hour(), dt.Minute(), dt.Second())
+
+	ts_nodash_with_tz := fmt.Sprintf("%d%02d%dT%02d%02d%02d",
 		dt.Year(), dt.Month(), dt.Day(),
 		dt.Hour(), dt.Minute(), dt.Second())
 
@@ -73,11 +82,16 @@ func AddAirflowTemplateVars(m map[string]string) map[string]string {
 
 	m["ds"] = ds
 	m["ds_nodash"] = ds_nodash
+
 	m["ts"] = ts
+	m["ts_nodash"] = ts_nodash
+	m["ts_nodash_with_tz"] = ts_nodash_with_tz
+
 	m["yesterday_ds"] = yesterday_ds
 	m["yesterday_ds_nodash"] = yesterday_ds_nodash
 	m["tomorrow_ds"] = tomorrow_ds
 	m["tomorrow_ds_nodash"] = tomorrow_ds_nodash
 
+	fmt.Println(m)
 	return m
 }
