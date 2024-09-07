@@ -18,7 +18,15 @@ var (
 		Long: `Tool for replacing Jinja2 templates for use with Apache Airflow.
 				Output is returned to the clipboard as well stdout.`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("template a SQL file with 'template' or 'templ'\nconfigure flowtool with 'config'")
+			fmt.Println("give me a .sql file or change flowtool config")
+
+			verboseFlag, _ := cmd.Flags().GetBool("verbose")
+			err := viper.ReadInConfig()
+			if verboseFlag && err == nil {
+				fmt.Println("Using config file:", viper.ConfigFileUsed())
+			} else if verboseFlag && err != nil {
+				fmt.Println("config file not found in $HOME/.flowtool.yaml or ./flowtool.yaml")
+			}
 		},
 	}
 )
@@ -30,6 +38,7 @@ func Execute() error {
 func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Do not print formatted output to the terminal")
+	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "Print additional information to the terminal")
 	rootCmd.PersistentFlags().String("env", "dev", "The desired environment to template into config values")
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default")
 }
@@ -51,8 +60,9 @@ func initConfig() {
 	}
 
 	viper.AutomaticEnv()
+	viper.ReadInConfig()
 
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
+	// if err := viper.ReadInConfig(); err != nil {
+	// 	fmt.Println("no .flowtool.yaml file found...")
+	// }
 }
