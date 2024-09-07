@@ -2,25 +2,32 @@ package utils
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
 	"github.com/fatih/color"
 )
 
-func ReadSQL(fileName string) string {
+func ReadSQL(fileName string) (string, error) {
 	// give warning if the filename doesn't have a '.sql' suffix
 	if !strings.HasSuffix(fileName, ".sql") {
 		color.Yellow("WARNING - specified filename does not have '.sql' suffix!\n")
 	}
 
-	f, err := os.ReadFile(fileName)
+	f, err := os.Open(fileName)
 	if err != nil {
-		fmt.Printf("error reading file contents from %s", fileName)
-		os.Exit(1)
+		return "", err
 	}
-	fileString := string(f)
-	return fileString
+	defer f.Close()
+
+	// read file into memory
+	bytes, err := io.ReadAll(f)
+	if err != nil {
+		return "", fmt.Errorf("error reading file contents from %s", fileName)
+	}
+
+	return string(bytes), nil
 }
 
 func ValidateSQL(sqlFile string) {
@@ -35,7 +42,11 @@ func ValidateSQL(sqlFile string) {
 
 // TODO: rename something like populateThing or mapConfigValues
 func TemplateSQLFile(fileName string, mapping map[string]string) string {
-	sqlFile := ReadSQL(fileName)
+	sqlFile, err := ReadSQL(fileName)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 	sqlFilePtr := &sqlFile
 
 	var template string

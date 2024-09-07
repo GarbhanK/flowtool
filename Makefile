@@ -18,9 +18,7 @@ clean:
 	rm ./bin/${BINARY_NAME}-windows
 
 test:
-	go test ./src/main/
-	go test ./src/templater/
-	go test ./src/mapper/
+	go test ./...
 
 dep:
 	go mod download
