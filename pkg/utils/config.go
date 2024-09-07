@@ -18,7 +18,7 @@ func ReadConfig() map[string]string {
 	configFile, err := os.ReadFile(fp)
 	if err != nil {
 		fmt.Printf("Cannot find 'config.json' file in path %s, %s\n", fp, err.Error())
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	m := map[string]string{}
@@ -29,7 +29,7 @@ func ReadConfig() map[string]string {
 	return m
 }
 
-func AddConfig(m map[string]string, key string, val string) {
+func AddConfig(m map[string]string, key string, val string) error {
 
 	// check if key already exists
 	for existing_key := range m {
@@ -44,8 +44,10 @@ func AddConfig(m map[string]string, key string, val string) {
 
 	err := writeToConfig(m)
 	if err != nil {
-		fmt.Printf("Error writing to config.json: %v\n", err)
+		return fmt.Errorf("error writing to 'config.json': %v", err)
 	}
+
+	return nil
 }
 
 func ListConfig() {

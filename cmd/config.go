@@ -54,7 +54,11 @@ var addCmd = &cobra.Command{
 		fmt.Println("Enter new val: ")
 		fmt.Scanln(&val)
 
-		utils.AddConfig(config, key, val)
+		err := utils.AddConfig(config, key, val)
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		fmt.Println("\nEntry added!")
 	},
 }

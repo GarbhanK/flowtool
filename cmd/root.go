@@ -31,7 +31,6 @@ func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Do not print formatted output to the terminal")
 	rootCmd.PersistentFlags().String("env", "dev", "The desired environment to template into config values")
-
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default")
 }
 
