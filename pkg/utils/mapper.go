@@ -37,11 +37,9 @@ func CreateMapping(env string) map[string]string {
 	// read json file into a map[string]string
 	json.Unmarshal([]byte(mappingFile), &m)
 
+	// env variable priority is... (--env flag > config file > default)
+	// if I have a flag set (default is dev), override config file
 	cfgFileEnv := viper.GetString("env")
-	fmt.Println(cfgFileEnv)
-
-	// set flag > config file > default
-	// if I have a flag set, override config file
 	if env == "dev" && cfgFileEnv != "" {
 		env = cfgFileEnv
 	}

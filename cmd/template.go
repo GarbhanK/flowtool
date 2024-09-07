@@ -42,12 +42,18 @@ var templateCmd = &cobra.Command{
 		// Send the templated string to the clipboard (doesn't work on linux)
 		utils.ExportToClipboard(templatedSQL)
 
-		// TODO: add 'quiet' flag for not printing to terminal
+		var beQuiet bool
 		cfgFileQuiet := viper.GetBool("quiet")
-		fmt.Println(cfgFileQuiet)
-
 		quietFlag, _ := cmd.Flags().GetBool("quiet")
-		if !quietFlag {
+
+		// if no quiet flag set (defaults to false), use config file setting
+		if quietFlag {
+			beQuiet = quietFlag
+		} else {
+			beQuiet = cfgFileQuiet
+		}
+
+		if !beQuiet {
 			fmt.Print(utils.ClipboardToString())
 		}
 	},
