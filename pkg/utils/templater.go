@@ -5,46 +5,23 @@ import (
 	"os"
 	"strings"
 
-	// "github.com/xwb1989/sqlparser"
 	"github.com/fatih/color"
 )
 
 func ReadSQL(fileName string) string {
+	// give warning if the filename doesn't have a '.sql' suffix
+	if !strings.HasSuffix(fileName, ".sql") {
+		color.Yellow("WARNING - specified filename does not have '.sql' suffix!\n")
+	}
+
 	f, err := os.ReadFile(fileName)
 	if err != nil {
-		// TODO: better error handling
-		panic(err)
+		fmt.Printf("error reading file contents from %s", fileName)
+		os.Exit(1)
 	}
-	// TODO: add check for if the file ends in '.sql'
-	//		 maybe just print a warning to the screen?
 	fileString := string(f)
 	return fileString
 }
-
-// This mostly works but I can't translate BigQuery SQL to MySQL (date function)
-// func validateSQL(sqlFile string) error {
-
-// 	formattedSQL := strings.ReplaceAll(sqlFile, "\n", " ")
-// 	formattedSQL = strings.ReplaceAll(formattedSQL, "`", "'")
-
-// 	fmt.Printf(formattedSQL)
-
-// 	stmt, err := sqlparser.Parse(formattedSQL)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-
-// 	switch stmt := stmt.(type) {
-// 	case *sqlparser.Select:
-// 		_ = stmt
-// 		return nil
-// 	case *sqlparser.DBDDL:
-// 		fmt.Printf("DBDDL type")
-// 		return errors.New("Warning - your query is a CREATE, ALTER, DROP, RENAME or TRUNCATE statement")
-// 	}
-
-// 	return errors.New("Cannot validate query type...")
-// }
 
 func ValidateSQL(sqlFile string) {
 	formattedSQL := strings.ReplaceAll(sqlFile, "\n", " ")
@@ -53,7 +30,6 @@ func ValidateSQL(sqlFile string) {
 	var statementType string = queryWords[0]
 	if strings.ToLower(statementType) == "create" {
 		color.Yellow("WARNING - copied query is a CREATE statement!\n")
-		// fmt.Printf("WARNING - copied query is a CREATE statement!\n")
 	}
 }
 
@@ -67,12 +43,6 @@ func TemplateSQLFile(fileName string, mapping map[string]string) string {
 		template = fmt.Sprintf("{{ %s }}", k)
 		*sqlFilePtr = strings.ReplaceAll(*sqlFilePtr, template, v)
 	}
-
-	// err := validateSQL(sqlFile)
-	// if err != nil {
-	// 	fmt.Printf("Warning... your query is a CREATE statement...\n")
-	// 	panic(err)
-	// }
 
 	return sqlFile
 }

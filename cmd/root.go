@@ -61,8 +61,4 @@ func initConfig() {
 
 	viper.AutomaticEnv()
 	viper.ReadInConfig()
-
-	// if err := viper.ReadInConfig(); err != nil {
-	// 	fmt.Println("no .flowtool.yaml file found...")
-	// }
 }
