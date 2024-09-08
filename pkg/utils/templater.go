@@ -31,14 +31,24 @@ func ReadSQL(fileName string) (string, error) {
 }
 
 func ValidateSQL(sqlFile string) {
-	// we could definitely add more 'validations' here, that or make the name more specific
 	formattedSQL := strings.ReplaceAll(sqlFile, "\n", " ")
 	queryWords := strings.Split(formattedSQL, " ")
 
-	var statementType string = queryWords[0]
-	if strings.ToLower(statementType) == "create" {
+	// Print warning to screen if it contains DDL
+	statementType := strings.ToLower(queryWords[0])
+	switch statementType {
+	case "create":
 		color.Yellow("WARNING - copied query is a CREATE statement!\n")
+	case "insert":
+		color.Yellow("WARNING - copied query is an INSERT statement!\n")
+	case "update":
+		color.Yellow("WARNING - copied query is an UPDATE statement!\n")
+	case "delete":
+		color.Red("WARNING - copied query is a DELETE statement!\n")
+	case "drop":
+		color.Red("DANGER - copied query is a DROP statement! Proceed with caution.\n")
 	}
+
 }
 
 // TODO: rename something like populateThing or mapConfigValues
