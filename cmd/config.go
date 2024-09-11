@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/garbhank/flowtool/pkg/utils"
+	"github.com/garbhank/flowtool/pkg/config"
 	"github.com/spf13/cobra"
 )
 
@@ -33,7 +33,8 @@ var listCmd = &cobra.Command{
 	Short: "List current config",
 	Long:  `Display the current key/value pairs in the current config.json.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		utils.ListConfig()
+		cfg := config.NewConfig()
+		cfg.List()
 	},
 }
 
@@ -42,11 +43,9 @@ var addCmd = &cobra.Command{
 	Short: "Add a key/value entry to the config file",
 	Long:  `Take user input to set a new key/value pair and write it to config.json.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		var key string
-		var val string
-
-		config := utils.ReadConfig()
-		utils.ListConfig()
+		var key, val string
+		cfg := config.NewConfig()
+		cfg.List()
 
 		// Take key/val from user input
 		fmt.Println("\nEnter new key: ")
@@ -54,7 +53,7 @@ var addCmd = &cobra.Command{
 		fmt.Println("Enter new val: ")
 		fmt.Scanln(&val)
 
-		err := utils.AddConfig(config, key, val)
+		err := cfg.Add(key, val)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -69,14 +68,13 @@ var removeCmd = &cobra.Command{
 	Short:   "remove key/value pairs from the config.json",
 	Run: func(cmd *cobra.Command, args []string) {
 		var key string
-
-		config := utils.ReadConfig()
-		utils.ListConfig()
+		cfg := config.NewConfig()
+		cfg.List()
 
 		fmt.Println("\nEnter key you want to remove: ")
 		fmt.Scanln(&key)
 
-		err := utils.RemoveConfig(config, key)
+		err := cfg.Remove(key)
 		if err != nil {
 			log.Fatal(err)
 		}

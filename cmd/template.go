@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
+	"github.com/garbhank/flowtool/pkg/template"
 	"github.com/garbhank/flowtool/pkg/utils"
 )
 
@@ -26,9 +27,9 @@ var templateCmd = &cobra.Command{
 		}
 		env, _ := cmd.Flags().GetString("env")
 
-		tConfig := utils.Templater{
+		tConfig := template.Templater{
 			Filename: args[0],
-			Mapping:  utils.CreateMapping(env),
+			Mapping:  template.CreateMapping(env),
 		}
 
 		// add airflow specific template variables to the current mapping config
