@@ -137,6 +137,7 @@ func (t *Templater) AddAirflowVars() {
 	tomorrow_ds := fmt.Sprintf("%d-%02d-%02d", tomorrow.Year(), tomorrow.Month(), tomorrow.Day())
 	tomorrow_ds_nodash := fmt.Sprintf("%d%02d%02d", tomorrow.Year(), tomorrow.Month(), tomorrow.Day())
 
+	// set airflow variables in the template mapping
 	t.Mapping["ds"] = ds
 	t.Mapping["ds_nodash"] = ds_nodash
 

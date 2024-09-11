@@ -34,9 +34,8 @@ func readConfig() map[string]string {
 		os.Exit(1)
 	}
 
-	m := map[string]string{}
-
 	// read json file into a map[string]string
+	m := map[string]string{}
 	json.Unmarshal([]byte(configFile), &m)
 
 	return m
@@ -89,10 +88,8 @@ func (c Config) List() {
 		}
 	}
 
-	var keylen int = 0
 	for key, val := range c.Contents {
-		keylen = len(key)
-		indent := longestKey - keylen
+		indent := longestKey - len(key)
 		whitespace := strings.Repeat(" ", indent)
 		fmt.Printf("%s: %s%s\n", key, whitespace, val)
 	}

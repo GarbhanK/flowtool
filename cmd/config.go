@@ -29,9 +29,10 @@ var configCmd = &cobra.Command{
 }
 
 var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List current config",
-	Long:  `Display the current key/value pairs in the current config.json.`,
+	Use:     "list",
+	Aliases: []string{"ls"},
+	Short:   "List current config",
+	Long:    `Display the current key/value pairs in the current config.json.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg := config.NewConfig()
 		cfg.List()
@@ -39,13 +40,17 @@ var listCmd = &cobra.Command{
 }
 
 var addCmd = &cobra.Command{
-	Use:   "add",
-	Short: "Add a key/value entry to the config file",
-	Long:  `Take user input to set a new key/value pair and write it to config.json.`,
+	Use:     "add",
+	Aliases: []string{"a"},
+	Short:   "Add a key/value entry to the config file",
+	Long:    `Take user input to set a new key/value pair and write it to config.json.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var key, val string
 		cfg := config.NewConfig()
 		cfg.List()
+
+		// TODO: only run the interactive bit if no args given,
+		//		 that way user could 'flowtool config add newkey newval'
 
 		// Take key/val from user input
 		fmt.Println("\nEnter new key: ")
@@ -71,6 +76,8 @@ var removeCmd = &cobra.Command{
 		cfg := config.NewConfig()
 		cfg.List()
 
+		// TODO: only run the interactive bit if no args given,
+		//		 that way user could 'flowtool config rm newkey'
 		fmt.Println("\nEnter key you want to remove: ")
 		fmt.Scanln(&key)
 
