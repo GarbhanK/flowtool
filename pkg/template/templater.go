@@ -20,7 +20,15 @@ type Templater struct {
 	Mapping       map[string]string
 }
 
-func CreateMapping(env string) map[string]string {
+func NewTemplater(filename string, env string) Templater {
+	newTemplater := Templater{
+		Filename: filename,
+		Mapping:  createMapping(env),
+	}
+	return newTemplater
+}
+
+func createMapping(env string) map[string]string {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		log.Fatal(err)

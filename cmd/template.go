@@ -27,22 +27,19 @@ var templateCmd = &cobra.Command{
 		}
 		env, _ := cmd.Flags().GetString("env")
 
-		tConfig := template.Templater{
-			Filename: args[0],
-			Mapping:  template.CreateMapping(env),
-		}
+		t := template.NewTemplater(args[0], env)
 
 		// add airflow specific template variables to the current mapping config
-		tConfig.AddAirflowVars()
+		t.AddAirflowVars()
 
 		// find and replace template variables in the file
-		tConfig.TemplateSQLFile()
+		t.TemplateSQLFile()
 
 		// Warn if sql statement has create/insert/update/delete/drop
-		tConfig.ValidateSQL()
+		t.ValidateSQL()
 
 		// Send the templated string to the clipboard (doesn't work on linux)
-		utils.ExportToClipboard(tConfig.FileTemplated)
+		utils.ExportToClipboard(t.FileTemplated)
 
 		var beQuiet bool
 		cfgFileQuiet := viper.GetBool("quiet")
