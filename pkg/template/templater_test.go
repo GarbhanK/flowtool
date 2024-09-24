@@ -10,10 +10,10 @@ import (
 
 var sql string = `select *
   from ` + "`{{ params.project }}.transactions.coffee`" + ` c
-  left join` + "`{{ params.web_project }}.user_data.signup`" + ` t
+  left join ` + "`{{ params.web_project }}.user_data.signup`" + ` t
     on c.userId = t.userId
- where date(insertionTimestamp) >= '{{ ds_nodash }}'
- group by insertionTimestamp desc
+  where date(insertionTimestamp) >= '{{ ds_nodash }}'
+  group by insertionTimestamp desc
 `
 
 var testMapping = map[string]string{
@@ -48,7 +48,7 @@ func TestReadSQL(t *testing.T) {
 		t.Errorf("ReadSQL(%s) FAILED. Got an empty string\n", tmpFile.Name())
 	}
 
-	templ.ReadSQL()
+	templ.readSQL()
 	expected := sql
 	result := templ.FileContents
 
@@ -139,44 +139,73 @@ func TestValidateSQL(t *testing.T) {
 	}
 }
 
-// func TestTemplateSQLFile(t *testing.T) {
+func TestTemplateSQLFile(t *testing.T) {
 
-// 	tests := []struct {
-// 		name           string
-// 		sqlFile        string
-// 		expectedOutput string
-// 	}{
-// 		{
-// 			name:           "Create statement",
-// 			sqlFile:        "CREATE TABLE users (id INT)",
-// 			expectedOutput: "WARNING - copied query is a CREATE statement!",
-// 		},
-// 		{
-// 			name:           "Insert statement",
-// 			sqlFile:        "INSERT INTO users (id, name) VALUES (1, 'John')",
-// 			expectedOutput: "WARNING - copied query is an INSERT statement!",
-// 		},
-// 		{
-// 			name:           "Update statement",
-// 			sqlFile:        "UPDATE users SET name = 'Jane' WHERE id = 1",
-// 			expectedOutput: "WARNING - copied query is an UPDATE statement!",
-// 		},
-// 	}
+	// yesterday := time.Now().AddDate(0, 0, -2)
+	// yesterday_ds_nodash := fmt.Sprintf("%d%02d%02d", yesterday.Year(), yesterday.Month(), yesterday.Day())
 
-// 	for _, test := range tests {
-// 		t.Run(test.name, func(t *testing.T) {
+	// sql_templated := `select *
+	// from ` + "`{{ params.project }}.transactions.coffee`" + ` c
+	// left join ` + "`{{ params.web_project }}.user_data.signup`" + ` t
+	// 	on c.userId = t.userId
+	// where date(insertionTimestamp) >= ` + yesterday_ds_nodash + `
+	// group by insertionTimestamp desc
+	// `
 
-// 			output := TemplateSQLFile(test.sqlFile, m)
+	tests := []struct {
+		name           string
+		sqlFile        string
+		expectedOutput string
+	}{
+		{
+			name:           "test1.sql",
+			sqlFile:        "CREATE TABLE {{ params.project }}.users (id INT)",
+			expectedOutput: "CREATE TABLE project123.users (id INT)",
+		},
+		{
+			name:           "test2.sql",
+			sqlFile:        "INSERT INTO {{ params.web_project }}.users (id, name) VALUES (1, 'John')",
+			expectedOutput: "INSERT INTO testproj.users (id, name) VALUES (1, 'John')",
+		},
+		// {
+		// 	name:           "test3.sql",
+		// 	sqlFile:        sql,
+		// 	expectedOutput: sql_templated,
+		// },
+	}
 
-// 			if len(output) != 0 {
-// 				output = output[:len(output)-1] // Remove the last newline character
-// 			}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
 
-// 			// Check if the actual output matches the expected output
-// 			if output != test.expectedOutput {
-// 				t.Errorf("expected %q but got %q", test.expectedOutput, output)
-// 			}
-// 		})
-// 	}
+			// create temp file for readSQL() function
+			tmpFile, err := os.CreateTemp("", test.name)
+			if err != nil {
+				t.Fatalf("Failed to create temp file: %v", err)
+			}
+			defer os.Remove(tmpFile.Name())
 
-// }
+			// Write some content to the temporary file
+			if _, err := tmpFile.WriteString(test.sqlFile); err != nil {
+				t.Fatalf("Failed to write to temp file: %v", err)
+			}
+			tmpFile.Close()
+
+			// create templater and save templated output
+			templ := Templater{
+				Filename:      tmpFile.Name(),
+				Mapping:       testMapping,
+				FileContents:  test.sqlFile,
+				FileTemplated: test.expectedOutput,
+			}
+
+			templ.TemplateSQLFile()
+			output := templ.FileTemplated
+
+			// Check if the actual output matches the expected output
+			if output != test.expectedOutput {
+				t.Errorf("expected %q but got %q", test.expectedOutput, output)
+			}
+		})
+	}
+
+}

@@ -60,7 +60,7 @@ func createMapping(env string) map[string]string {
 	return m
 }
 
-func (t *Templater) ReadSQL() {
+func (t *Templater) readSQL() {
 	// give warning if the filename doesn't have a '.sql' suffix
 	if !strings.HasSuffix(t.Filename, ".sql") {
 		color.Yellow("WARNING - specified filename does not have '.sql' suffix!\n")
@@ -104,7 +104,7 @@ func (t Templater) ValidateSQL() {
 }
 
 func (t *Templater) TemplateSQLFile() {
-	t.ReadSQL()
+	t.readSQL()
 
 	sqlFilePtr := &t.FileContents
 
