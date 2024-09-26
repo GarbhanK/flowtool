@@ -49,14 +49,17 @@ var addCmd = &cobra.Command{
 		cfg := config.NewConfig()
 		cfg.List()
 
-		// TODO: only run the interactive bit if no args given,
-		//		 that way user could 'flowtool config add newkey newval'
-
-		// Take key/val from user input
-		fmt.Println("\nEnter new key: ")
-		fmt.Scanln(&key)
-		fmt.Println("Enter new val: ")
-		fmt.Scanln(&val)
+		if len(args) == 2 {
+			// check if k/v pair are given as command args
+			key = args[0]
+			val = args[1]
+		} else {
+			// Take key/val from user input
+			fmt.Println("\nEnter new key: ")
+			fmt.Scanln(&key)
+			fmt.Println("Enter new val: ")
+			fmt.Scanln(&val)
+		}
 
 		err := cfg.Add(key, val)
 		if err != nil {
@@ -76,16 +79,20 @@ var removeCmd = &cobra.Command{
 		cfg := config.NewConfig()
 		cfg.List()
 
-		// TODO: only run the interactive bit if no args given,
-		//		 that way user could 'flowtool config rm newkey'
-		fmt.Println("\nEnter key you want to remove: ")
-		fmt.Scanln(&key)
+		if len(args) == 1 {
+			// Check the key is given in the args
+			key = args[0]
+		} else {
+			// take key from user input
+			fmt.Println("\nEnter key you want to remove: ")
+			fmt.Scanln(&key)
+		}
 
 		err := cfg.Remove(key)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		fmt.Printf("Successfully removed %s from config!\n", key)
+		fmt.Printf("\nSuccessfully removed %s from config!\n", key)
 	},
 }
