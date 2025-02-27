@@ -47,6 +47,7 @@ func Execute() error {
 }
 
 func init() {
+	// cobra settings
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().BoolP("quiet", "q", false, "Do not print formatted output to the terminal")
 	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "Print additional information to the terminal")
@@ -63,10 +64,9 @@ func initConfig() {
 		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
-		// Search config in home dir with name .flowtool (without extension)
+		// Search config in home dir with name config.json (without extension)
 		viper.AddConfigPath(home)
-		viper.AddConfigPath(".")
-		viper.SetConfigType("yaml")
+		viper.SetConfigType("json")
 		viper.SetConfigName(".flowtool")
 	}
 
