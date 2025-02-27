@@ -8,7 +8,7 @@ import (
 func main() {
 	err := cmd.Execute()
 	if err != nil {
-		log.Fatal("Error executing command entrypoint: %s", err.Error())
+		log.Fatalf("Error executing command entrypoint: %s", err.Error())
 	}
 }
 

@@ -21,21 +21,22 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("give me a .sql file or change flowtool config")
 
-			if err = viper.ReadInConfig(); err != nil {
+			err := viper.ReadInConfig();
+			if err != nil {
 				if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 					// config file not found, ignore error if desired
-					log.Fatalf("Error: Config file not found: %s", err.Error())
+					log.Printf("Error: Config file not found: %s", err)
 				} else {
 					// config file was found but another error was produced	
-					log.Fatalf("Error reading in config from viper: %s", err.Error())
+					log.Printf("Error reading in config from viper: %s", err)
 				}
 			}
 
 			verboseFlag, err := cmd.Flags().GetBool("verbose")
-			if verboseFlag && err == nil {
-				fmt.Println("Using config file:", viper.ConfigFileUsed())
-			} else if verboseFlag && err != nil {
-				fmt.Println("config file not found in $HOME/.flowtool.yaml or ./flowtool.yaml")
+			if err != nil {
+				log.Printf("Error retrieving verbose flag: %s", err.Error())
+			} else if verboseFlag {
+				fmt.Printf("Using config file %s:", viper.ConfigFileUsed())
 			}
 		},
 	}
