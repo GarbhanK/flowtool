@@ -36,7 +36,11 @@ func readConfig() map[string]string {
 
 	// read json file into a map[string]string
 	m := map[string]string{}
-	json.Unmarshal([]byte(configFile), &m)
+	err = json.Unmarshal([]byte(configFile), &m)
+	if err != nil {
+		fmt.Printf("Error while unmarshalling 'config.json': %s", err.Error())
+		os.Exit(1)
+	}
 
 	return m
 }
@@ -48,6 +52,9 @@ func writeToConfig(m map[string]string) error {
 	}
 
 	fp := fmt.Sprintf("%s/Documents/flowtool/config.json", homeDir)
+	if fp == "" {
+		return fmt.Errorf("Error creating path string to the 'config.json' file: %s, %s", homeDir, err.Error())
+	}
 
 	jsonString, _ := json.MarshalIndent(m, "", "    ")
 	err = os.WriteFile(fp, jsonString, os.ModePerm)

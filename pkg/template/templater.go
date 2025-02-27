@@ -43,7 +43,11 @@ func createMapping(env string) map[string]string {
 
 	// read json file into a map[string]string
 	m := map[string]string{}
-	json.Unmarshal([]byte(mappingFile), &m)
+	err = json.Unmarshal([]byte(mappingFile), &m)
+	if err != nil {
+		fmt.Printf("Error while unmarshalling the mapping file: %s", err.Error())
+		os.Exit(1)
+	}
 
 	// env variable priority is... (--env flag > config file > default)
 	// if I have a flag set (default is dev), override config file

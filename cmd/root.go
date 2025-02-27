@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"log"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -20,8 +21,10 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("give me a .sql file or change flowtool config")
 
-			verboseFlag, _ := cmd.Flags().GetBool("verbose")
-			err := viper.ReadInConfig()
+			verboseFlag, err := cmd.Flags().GetBool("verbose")
+			if err = viper.ReadInConfig(); err != nil {
+				log.Fatal("Error reading in config from viper: %s", err.Error())
+			}
 			if verboseFlag && err == nil {
 				fmt.Println("Using config file:", viper.ConfigFileUsed())
 			} else if verboseFlag && err != nil {

@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/garbhank/flowtool/pkg/config"
 	"github.com/spf13/cobra"
@@ -85,7 +86,11 @@ var removeCmd = &cobra.Command{
 		} else {
 			// take key from user input
 			fmt.Println("\nEnter key you want to remove: ")
-			fmt.Scanln(&key)
+			_, err := fmt.Scanln(&key); 
+			if err != nil {
+				fmt.Println("Error reading input:", err.Error())
+				os.Exit(1)
+			}
 		}
 
 		err := cfg.Remove(key)
