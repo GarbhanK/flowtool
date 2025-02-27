@@ -57,9 +57,18 @@ var addCmd = &cobra.Command{
 		} else {
 			// Take key/val from user input
 			fmt.Println("\nEnter new key: ")
-			fmt.Scanln(&key)
+			_, err := fmt.Scanln(&key)
+			if err != nil {
+				fmt.Println("Error reading key input:", err.Error())
+				os.Exit(1)
+			}
+
 			fmt.Println("Enter new val: ")
-			fmt.Scanln(&val)
+			_, err = fmt.Scanln(&val)
+			if err != nil {
+				fmt.Println("Error reading value input:", err.Error())
+				os.Exit(1)
+			}
 		}
 
 		err := cfg.Add(key, val)

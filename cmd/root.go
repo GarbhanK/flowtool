@@ -21,10 +21,17 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("give me a .sql file or change flowtool config")
 
-			verboseFlag, err := cmd.Flags().GetBool("verbose")
 			if err = viper.ReadInConfig(); err != nil {
-				log.Fatal("Error reading in config from viper: %s", err.Error())
+				if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+					// config file not found, ignore error if desired
+					log.Fatalf("Error: Config file not found: %s", err.Error())
+				} else {
+					// config file was found but another error was produced	
+					log.Fatalf("Error reading in config from viper: %s", err.Error())
+				}
 			}
+
+			verboseFlag, err := cmd.Flags().GetBool("verbose")
 			if verboseFlag && err == nil {
 				fmt.Println("Using config file:", viper.ConfigFileUsed())
 			} else if verboseFlag && err != nil {
