@@ -1,0 +1,36 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: go-test
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+permissions:
+  contents: read
+  # Optional: allow read access to pull request. Use with `only-new-issues` option.
+  # pull-requests: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Build
+        run: go build -v -o flowtool ./src/main/main.go
+
+      - name: Test
+        run: |
+          go test -v ./src/main
+          go test -v ./src/mapper
+          go test -v ./src/templater
