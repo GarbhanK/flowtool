@@ -27,10 +27,8 @@ jobs:
           go-version: stable
 
       - name: Build
-        run: go build -v -o flowtool ./src/main/main.go
+        run: go build -v -o flowtool ./main.go
 
       - name: Test
         run: |
-          go test -v ./src/main
-          go test -v ./src/mapper
-          go test -v ./src/templater
+          go test -v ./pkg/template

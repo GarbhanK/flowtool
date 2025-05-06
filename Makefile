@@ -9,7 +9,7 @@ all:
 	GOARCH=amd64 GOOS=windows go build -o ./bin/${BINARY_NAME}-windows ./main.go
 
 run:
-	go run ./src/main/main.go
+	go run ./main.go
 
 clean:
 	go clean
