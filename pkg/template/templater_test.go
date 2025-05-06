@@ -28,13 +28,21 @@ func TestReadSQL(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create temp file: %v", err)
 	}
-	defer os.Remove(tmpFile.Name())
+	// defer in an anonymous function to handle return value
+	defer func(name string) {
+		if err := os.Remove(name); err != nil {
+			t.Fatalf("Failed to remove temp file: %v", err)
+		}
+	}(tmpFile.Name())
 
 	// Write some content to the temporary file
 	if _, err := tmpFile.WriteString(sql); err != nil {
 		t.Fatalf("Failed to write to temp file: %v", err)
 	}
-	tmpFile.Close()
+	err = tmpFile.Close()
+	if err != nil {
+		t.Fatalf("Failed to close tmpFile: %v", err)
+	}
 
 	templ := Templater{
 		Filename: tmpFile.Name(),
@@ -182,13 +190,22 @@ func TestTemplateSQLFile(t *testing.T) {
 			if err != nil {
 				t.Fatalf("Failed to create temp file: %v", err)
 			}
-			defer os.Remove(tmpFile.Name())
+			// defer in an anonymous function to handle return value
+			defer func(name string) {
+				if err := os.Remove(name); err != nil {
+					t.Fatalf("Failed to remove temp file: %v", err)
+				}
+			}(tmpFile.Name())
 
 			// Write some content to the temporary file
 			if _, err := tmpFile.WriteString(test.sqlFile); err != nil {
 				t.Fatalf("Failed to write to temp file: %v", err)
 			}
-			tmpFile.Close()
+
+			err = tmpFile.Close()
+			if err != nil {
+				t.Fatalf("Failed to close tmpFile: %v", err)
+			}
 
 			// create templater and save templated output
 			templ := Templater{

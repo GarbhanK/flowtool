@@ -53,7 +53,7 @@ func writeToConfig(m map[string]string) error {
 
 	fp := fmt.Sprintf("%s/Documents/flowtool/config.json", homeDir)
 	if fp == "" {
-		return fmt.Errorf("Error creating path string to the 'config.json' file: %s, %s", homeDir, err.Error())
+		return fmt.Errorf("error creating path string to the 'config.json' file: %s", homeDir)
 	}
 
 	jsonString, _ := json.MarshalIndent(m, "", "    ")
@@ -88,7 +88,7 @@ func (c *Config) Add(key string, val string) error {
 
 func (c Config) List() {
 	// find the longest key
-	var longestKey int = 0
+	longestKey := 0
 	for key := range c.Contents {
 		if len(key) > longestKey {
 			longestKey = len(key)

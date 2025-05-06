@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"log"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -21,13 +21,13 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("give me a .sql file or change flowtool config")
 
-			err := viper.ReadInConfig();
+			err := viper.ReadInConfig()
 			if err != nil {
 				if _, ok := err.(viper.ConfigFileNotFoundError); ok {
 					// config file not found, ignore error if desired
 					log.Printf("Error: Config file not found: %s", err)
 				} else {
-					// config file was found but another error was produced	
+					// config file was found but another error was produced
 					log.Printf("Error reading in config from viper: %s", err)
 				}
 			}
@@ -71,5 +71,16 @@ func initConfig() {
 	}
 
 	viper.AutomaticEnv()
-	viper.ReadInConfig()
+
+	// read config file
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			// Config file not found; this may be okay
+			log.Printf("Config file not found: %s", err)
+		} else {
+			// Config file was found but another error was produced
+			log.Fatalf("Error reading config: %s", err)
+		}
+	}
+
 }

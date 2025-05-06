@@ -58,7 +58,7 @@ func createMapping(env string) map[string]string {
 
 	// template chosen environment into our mapping file
 	for k, v := range m {
-		m[k] = strings.Replace(v, "${env}", env, -1)
+		m[k] = strings.ReplaceAll(v, "${env}", env)
 	}
 
 	return m
@@ -75,7 +75,13 @@ func (t *Templater) readSQL() {
 		fmt.Printf("error reading file into memory: %s", err)
 		os.Exit(1)
 	}
-	defer f.Close()
+	// defer in an anonymous function to handle return value
+	defer func(f *os.File) {
+		if err := f.Close(); err != nil {
+			fmt.Printf("Failed to remove temp file: %v", err)
+			os.Exit(1)
+		}
+	}(f)
 
 	// read file into memory
 	bytes, err := io.ReadAll(f)
